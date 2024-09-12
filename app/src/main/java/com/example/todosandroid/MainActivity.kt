@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,4 +19,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Todo(text: String) {
     Text(text)
+}
+
+@Preview
+@Composable
+fun TodoPreview() {
+    Todo("Sport machen")
 }
