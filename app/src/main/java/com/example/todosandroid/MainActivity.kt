@@ -21,7 +21,9 @@ fun Todo(text: String) {
     Text(text)
 }
 
-@Preview
+@Preview(showBackground = true,
+    showSystemUi = true,
+    name = "Todo Vorschau")
 @Composable
 fun TodoPreview() {
     Todo("Sport machen")
