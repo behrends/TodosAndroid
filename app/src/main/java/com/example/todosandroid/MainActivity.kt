@@ -62,7 +62,7 @@ fun Todo(name: String) {
     var done by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
-            .clickable(onClick = {})
+            .clickable(onClick = { done = !done })
             .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
