@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TodoList(modifier: Modifier = Modifier) {
-    val todos = listOf("Einkaufen", "Android lernen", "Sport machen")
+    val todos = List(100) { "Todo Nr. $it" }
     Column(modifier) {
         for (todo in todos) {
             Todo(todo)
