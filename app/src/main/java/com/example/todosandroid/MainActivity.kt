@@ -5,10 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
@@ -49,8 +50,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TodoList(modifier: Modifier = Modifier) {
     val todos = List(100) { "Todo Nr. $it" }
-    Column(modifier) {
-        for (todo in todos) {
+    LazyColumn(modifier) {
+        items(todos) { todo ->
             Todo(todo)
         }
     }
