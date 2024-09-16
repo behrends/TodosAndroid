@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -35,12 +36,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val todos = remember { mutableStateListOf<String>() }
             TodosAndroidTheme {
                 Scaffold(floatingActionButton = {
-                    FloatingActionButton(onClick = {},
+                    FloatingActionButton(onClick = { todos.add("Neues Todo") },
                         content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") })
                 }) { innerPadding ->
-                    TodoList(modifier = Modifier.padding(innerPadding))
+                    TodoList(todos = todos, modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -48,8 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TodoList(modifier: Modifier = Modifier) {
-    val todos = List(100) { "Todo Nr. $it" }
+fun TodoList(todos: List<String>, modifier: Modifier = Modifier) {
     LazyColumn(modifier) {
         items(todos) { todo ->
             Todo(todo)
