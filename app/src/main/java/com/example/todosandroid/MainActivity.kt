@@ -1,5 +1,6 @@
 package com.example.todosandroid
 
+import AddTodoDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,10 +39,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             val todos = remember { mutableStateListOf<String>() }
             TodosAndroidTheme {
+                var showDialog by remember { mutableStateOf(false) }
                 Scaffold(floatingActionButton = {
-                    FloatingActionButton(onClick = { todos.add("Neues Todo") },
+                    FloatingActionButton(onClick = { showDialog = true },
                         content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") })
                 }) { innerPadding ->
+                    if (showDialog) {
+                        AddTodoDialog(
+                            onDismiss = { showDialog = false },
+                            onAdd = { newTodo ->
+                                todos.add(newTodo)
+                                showDialog = false
+                            }
+                        )
+                    }
                     TodoList(todos = todos, modifier = Modifier.padding(innerPadding))
                 }
             }
