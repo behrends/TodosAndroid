@@ -23,19 +23,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.todosandroid.ui.theme.TodosAndroidTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Scaffold(floatingActionButton = {
-                FloatingActionButton(
-                    onClick = {},
-                    content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") }
-                )
-            }) { innerPadding ->
-                TodoList(modifier = Modifier.padding(innerPadding))
+            TodosAndroidTheme {
+                Scaffold(floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {},
+                        content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") }
+                    )
+                }) { innerPadding ->
+                    TodoList(modifier = Modifier.padding(innerPadding))
+                }
             }
         }
     }
