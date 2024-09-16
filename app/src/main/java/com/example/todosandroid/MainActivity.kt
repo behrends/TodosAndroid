@@ -17,8 +17,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -57,7 +59,7 @@ fun TodoList(modifier: Modifier = Modifier) {
 
 @Composable
 fun Todo(name: String) {
-    val done = remember { mutableStateOf(false) }
+    var done by remember { mutableStateOf(false) }
     Row(
         modifier = Modifier
             .clickable(onClick = {})
@@ -65,7 +67,7 @@ fun Todo(name: String) {
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = done.value, onCheckedChange = { newVal -> done.value = newVal })
+        Checkbox(checked = done, onCheckedChange = { done = it })
         Text(name, fontWeight = FontWeight.Bold, fontSize = 22.sp)
     }
 }
