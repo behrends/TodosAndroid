@@ -36,10 +36,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             TodosAndroidTheme {
                 Scaffold(floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {},
-                        content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") }
-                    )
+                    FloatingActionButton(onClick = {},
+                        content = { Icon(Icons.Filled.Add, contentDescription = "Todo erstellen") })
                 }) { innerPadding ->
                     TodoList(modifier = Modifier.padding(innerPadding))
                 }
@@ -50,10 +48,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TodoList(modifier: Modifier = Modifier) {
+    val todos = listOf("Einkaufen", "Android lernen", "Sport machen")
     Column(modifier) {
-        Todo("Einkaufen")
-        Todo("Android lernen")
-        Todo("Sport machen")
+        for (todo in todos) {
+            Todo(todo)
+        }
     }
 }
 
@@ -73,9 +72,7 @@ fun Todo(name: String) {
 }
 
 @Preview(
-    showBackground = true,
-    showSystemUi = true,
-    name = "Todo Vorschau"
+    showBackground = true, showSystemUi = true, name = "Todo Vorschau"
 )
 @Composable
 fun TodoPreview() {
