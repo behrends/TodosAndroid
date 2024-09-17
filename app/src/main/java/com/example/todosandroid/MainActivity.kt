@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +73,11 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
-                    TodoList(todos = todos, modifier = Modifier.padding(innerPadding))
+                    TodoList(
+                        todos = todos,
+                        todoDao = todoDao,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
@@ -80,25 +85,38 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TodoList(todos: List<TodoItem>, modifier: Modifier = Modifier) {
+fun TodoList(todos: List<TodoItem>, todoDao: TodoDao, modifier: Modifier = Modifier) {
     LazyColumn(modifier) {
         items(todos) { todo ->
-            Todo(todo)
+            Todo(todo = todo, todoDao = todoDao)
         }
     }
 }
 
 @Composable
-fun Todo(todo: TodoItem) {
+fun Todo(todo: TodoItem, todoDao: TodoDao) {
+    val coroutineScope = rememberCoroutineScope()
     var done by remember { mutableStateOf(todo.done) }
     Row(
         modifier = Modifier
-            .clickable(onClick = { done = !done })
+            .clickable(onClick = {
+                done = !done
+                // Status in der Datenbank aktualisieren
+                coroutineScope.launch {
+                    todoDao.updateTodo(todo.copy(done = done))
+                }
+            })
             .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Checkbox(checked = done, onCheckedChange = { done = it })
+        Checkbox(checked = done, onCheckedChange = {
+            done = it
+            // Status in der Datenbank aktualisieren
+            coroutineScope.launch {
+                todoDao.updateTodo(todo.copy(done = done))
+            }
+        })
         Text(todo.name, fontWeight = FontWeight.Bold, fontSize = 22.sp)
     }
 }
