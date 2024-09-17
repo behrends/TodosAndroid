@@ -30,11 +30,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.room.Room
+import com.example.todosandroid.data.AppDatabase
+import com.example.todosandroid.data.TodoDao
 import com.example.todosandroid.ui.theme.TodosAndroidTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var database: AppDatabase
+    private lateinit var todoDao: TodoDao
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Datenbank erstellen
+        database = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "todo-database"
+        ).build()
+        todoDao = database.todoDao()
+
         enableEdgeToEdge()
         setContent {
             val todos = remember { mutableStateListOf<String>() }
