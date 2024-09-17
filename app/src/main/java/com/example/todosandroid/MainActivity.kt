@@ -19,21 +19,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.example.todosandroid.data.AppDatabase
 import com.example.todosandroid.data.TodoDao
+import com.example.todosandroid.data.TodoItem
 import com.example.todosandroid.ui.theme.TodosAndroidTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var database: AppDatabase
@@ -51,7 +53,8 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val todos = remember { mutableStateListOf<String>() }
+            val todos by todoDao.getAllTodos().collectAsState(initial = emptyList())
+
             TodosAndroidTheme {
                 var showDialog by remember { mutableStateOf(false) }
                 Scaffold(floatingActionButton = {
@@ -62,7 +65,9 @@ class MainActivity : ComponentActivity() {
                         AddTodoDialog(
                             onDismiss = { showDialog = false },
                             onAdd = { newTodo ->
-                                todos.add(newTodo)
+                                lifecycleScope.launch {
+                                    todoDao.insertTodo(TodoItem(name = newTodo))
+                                }
                                 showDialog = false
                             }
                         )
@@ -75,7 +80,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TodoList(todos: List<String>, modifier: Modifier = Modifier) {
+fun TodoList(todos: List<TodoItem>, modifier: Modifier = Modifier) {
     LazyColumn(modifier) {
         items(todos) { todo ->
             Todo(todo)
@@ -84,8 +89,8 @@ fun TodoList(todos: List<String>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Todo(name: String) {
-    var done by remember { mutableStateOf(false) }
+fun Todo(todo: TodoItem) {
+    var done by remember { mutableStateOf(todo.done) }
     Row(
         modifier = Modifier
             .clickable(onClick = { done = !done })
@@ -94,14 +99,6 @@ fun Todo(name: String) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Checkbox(checked = done, onCheckedChange = { done = it })
-        Text(name, fontWeight = FontWeight.Bold, fontSize = 22.sp)
+        Text(todo.name, fontWeight = FontWeight.Bold, fontSize = 22.sp)
     }
-}
-
-@Preview(
-    showBackground = true, showSystemUi = true, name = "Todo Vorschau"
-)
-@Composable
-fun TodoPreview() {
-    Todo("Sport machen")
 }
