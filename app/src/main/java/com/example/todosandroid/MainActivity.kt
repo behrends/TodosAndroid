@@ -11,6 +11,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.todosandroid.data.AppDatabase
 import com.example.todosandroid.data.TodoDao
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
             TodosAndroidTheme {
                 Scaffold(bottomBar = {
                     BottomAppBar(actions = {
