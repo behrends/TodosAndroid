@@ -43,10 +43,26 @@ class MainActivity : ComponentActivity() {
             TodosAndroidTheme {
                 Scaffold(bottomBar = {
                     BottomAppBar(actions = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+                            navController.navigate("home") {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }) {
                             Icon(Icons.Filled.Home, contentDescription = "Todos")
                         }
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+                            navController.navigate("settings") {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }) {
                             Icon(
                                 Icons.Filled.Settings,
                                 contentDescription = "Einstellungen",
