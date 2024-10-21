@@ -25,18 +25,12 @@ import com.example.todosandroid.ui.SettingsScreen
 import com.example.todosandroid.ui.theme.TodosAndroidTheme
 
 class MainActivity : ComponentActivity() {
-    private lateinit var database: AppDatabase
-    private lateinit var todoDao: TodoDao
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Datenbank erstellen
-        database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "todo-database"
-        ).build()
-        todoDao = database.todoDao()
+        val database = AppDatabase.getInstance(applicationContext)
+        val todoDao = database.todoDao()
 
         enableEdgeToEdge()
         setContent {
