@@ -12,6 +12,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -39,49 +40,54 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
-            TodosAndroidTheme {
-                Scaffold(bottomBar = {
-                    BottomAppBar(actions = {
-                        IconButton(onClick = {
-                            navController.navigate("home") {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }) {
-                            Icon(Icons.Filled.Home, contentDescription = "Todos")
+            TodoApp(todoDao)
+        }
+    }
+}
+
+@Composable
+fun TodoApp(todoDao: TodoDao) {
+    TodosAndroidTheme {
+        val navController = rememberNavController()
+        Scaffold(bottomBar = {
+            BottomAppBar(actions = {
+                IconButton(onClick = {
+                    navController.navigate("home") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
                         }
-                        IconButton(onClick = {
-                            navController.navigate("settings") {
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }) {
-                            Icon(
-                                Icons.Filled.Settings,
-                                contentDescription = "Einstellungen",
-                            )
-                        }
-                    })
-                }) { innerPadding ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = "home",
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        composable("home") {
-                            HomeScreen(todoDao)
-                        }
-                        composable("settings") {
-                            SettingsScreen()
-                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
+                }) {
+                    Icon(Icons.Filled.Home, contentDescription = "Todos")
+                }
+                IconButton(onClick = {
+                    navController.navigate("settings") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }) {
+                    Icon(
+                        Icons.Filled.Settings,
+                        contentDescription = "Einstellungen",
+                    )
+                }
+            })
+        }) { innerPadding ->
+            NavHost(
+                navController = navController,
+                startDestination = "home",
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                composable("home") {
+                    HomeScreen(todoDao)
+                }
+                composable("settings") {
+                    SettingsScreen()
                 }
             }
         }
